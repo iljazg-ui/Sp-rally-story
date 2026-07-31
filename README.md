@@ -1,2 +1,2 @@
-# SP Rally Studio v6.3
-Vsaka predloga ima svoj razpored stolpcev. Popravljene pisave in prekrivanje besedila.
+# SP Rally Studio 7
+Stabilna različica s štirimi ločenimi predlogami.
