@@ -1,2 +1,2 @@
-# SP Rally Studio v6
-Brand Manager, zamenljiv glavni logotip, 6 partnerjev, zaklep elementov, SLO/ENG.
+# SP Rally Studio v6.1
+Popravljeno: predloge zamenjajo vsebino, ločena pisava naslova in tabele, tabela se samodejno prilagodi višini.
