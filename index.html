@@ -260,18 +260,18 @@ function draw(){
     const mh=contain(mainLogo,pos.mainLogo.x*sx,pos.mainLogo.y*sy,pos.mainLogo.w*sx);
     hitboxes.push({id:"mainLogo",x:pos.mainLogo.x*sx,y:pos.mainLogo.y*sy,w:pos.mainLogo.w*sx,h:mh});
     partners.forEach((im,i)=>{if(!im)return;const p=pos["partner"+i],h=contain(im,p.x*sx,p.y*sy,p.w*sx);hitboxes.push({id:"partner"+i,x:p.x*sx,y:p.y*sy,w:p.w*sx,h})});
-    ctx.textAlign="center";ctx.fillStyle=tc;ctx.font=`900 ${E("titleSize").value*sc}px "${f}"`;ctx.fillText(E("event").value.toUpperCase(),pos.title.x*sx,pos.title.y*sy);
-    ctx.fillStyle=ac;ctx.font=`700 ${E("titleSize").value*.55*sc}px "${f}"`;ctx.fillText(E("location").value.toUpperCase(),pos.title.x*sx,(pos.title.y+60)*sy);
+    ctx.textAlign="center";ctx.fillStyle=tc;ctx.font=`900 ${E("titleSize").value*sc}px ${titleF}`;ctx.fillText(E("event").value.toUpperCase(),pos.title.x*sx,pos.title.y*sy);
+    ctx.fillStyle=ac;ctx.font=`700 ${E("titleSize").value*.55*sc}px ${titleF}`;ctx.fillText(E("location").value.toUpperCase(),pos.title.x*sx,(pos.title.y+60)*sy);
     hitboxes.push({id:"title",x:(pos.title.x-430)*sx,y:(pos.title.y-90)*sy,w:860*sx,h:170*sy});
-    ctx.textAlign="left";ctx.fillStyle=tc;ctx.font=`900 ${60*sc}px "${f}"`;ctx.fillText(E("day").value.toUpperCase(),pos.date.x*sx,pos.date.y*sy);
-    ctx.font=`900 ${76*sc}px "${f}"`;ctx.fillText(E("date").value,pos.date.x*sx,(pos.date.y+82)*sy);
+    ctx.textAlign="left";ctx.fillStyle=tc;ctx.font=`900 ${60*sc}px ${titleF}`;ctx.fillText(E("day").value.toUpperCase(),pos.date.x*sx,pos.date.y*sy);
+    ctx.font=`900 ${76*sc}px ${titleF}`;ctx.fillText(E("date").value,pos.date.x*sx,(pos.date.y+82)*sy);
     hitboxes.push({id:"date",x:pos.date.x*sx,y:(pos.date.y-65)*sy,w:330*sx,h:170*sy});
     const list=rows();
     const available=Math.max(180*sy,H-pos.table.y*sy-90*sy);
     const gap=Math.min(73*sc,Math.max(34*sc,available/Math.max(list.length,1)));
     const requested=E("bodySize").value*sc;
     const bs=Math.min(requested,Math.max(22*sc,gap*.64));
-    list.forEach((r,i)=>{const y=pos.table.y*sy+i*gap;ctx.textAlign="right";ctx.fillStyle=tc;ctx.font=`800 ${bs}px "${f}"`;ctx.fillText(r[0],(pos.table.x+125)*sx,y);ctx.textAlign="left";ctx.fillStyle=ac;ctx.font=`900 ${bs}px "${f}"`;ctx.fillText(r[1],(pos.table.x+185)*sx,y);ctx.fillStyle=tc;ctx.font=`400 ${bs}px "${f}"`;ctx.fillText(r[2],(pos.table.x+330)*sx,y)});
+    list.forEach((r,i)=>{const y=pos.table.y*sy+i*gap;ctx.textAlign="right";ctx.fillStyle=tc;ctx.font=`800 ${bs}px ${bodyF}`;ctx.fillText(r[0],(pos.table.x+125)*sx,y);ctx.textAlign="left";ctx.fillStyle=ac;ctx.font=`900 ${bs}px ${bodyF}`;ctx.fillText(r[1],(pos.table.x+185)*sx,y);ctx.fillStyle=tc;ctx.font=`400 ${bs}px ${bodyF}`;ctx.fillText(r[2],(pos.table.x+330)*sx,y)});
     hitboxes.push({id:"table",x:pos.table.x*sx,y:(pos.table.y-45)*sy,w:780*sx,h:list.length*gap+60*sy});
     saveCurrent();
   }catch(err){
