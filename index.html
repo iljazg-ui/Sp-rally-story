@@ -253,29 +253,98 @@ function rows(){return E("data").value.split(/\n/).map(x=>x.trim()).filter(Boole
 function draw(){
   try{
     const [W,H]=dims();canvas.width=W;canvas.height=H;
-    const sx=W/1080,sy=H/1920,sc=Math.min(sx,sy),titleF=E("titleFont").value,bodyF=E("bodyFont").value,tc=E("textColor").value,ac=E("accentColor").value;
+    const sx=W/1080,sy=H/1920,sc=Math.min(sx,sy);
+    const titleF=E("titleFont").value,bodyF=E("bodyFont").value;
+    const tc=E("textColor").value,ac=E("accentColor").value;
     ctx.fillStyle=E("baseColor").value;ctx.fillRect(0,0,W,H);
     if(bg){cover(bg,W,H);ctx.fillStyle=`rgba(0,0,0,${E("darken").value/100})`;ctx.fillRect(0,0,W,H)}
     hitboxes=[];
+
     const mh=contain(mainLogo,pos.mainLogo.x*sx,pos.mainLogo.y*sy,pos.mainLogo.w*sx);
     hitboxes.push({id:"mainLogo",x:pos.mainLogo.x*sx,y:pos.mainLogo.y*sy,w:pos.mainLogo.w*sx,h:mh});
-    partners.forEach((im,i)=>{if(!im)return;const p=pos["partner"+i],h=contain(im,p.x*sx,p.y*sy,p.w*sx);hitboxes.push({id:"partner"+i,x:p.x*sx,y:p.y*sy,w:p.w*sx,h})});
-    ctx.textAlign="center";ctx.fillStyle=tc;ctx.font=`900 ${E("titleSize").value*sc}px ${titleF}`;ctx.fillText(E("event").value.toUpperCase(),pos.title.x*sx,pos.title.y*sy);
-    ctx.fillStyle=ac;ctx.font=`700 ${E("titleSize").value*.55*sc}px ${titleF}`;ctx.fillText(E("location").value.toUpperCase(),pos.title.x*sx,(pos.title.y+60)*sy);
+    partners.forEach((im,i)=>{
+      if(!im)return;
+      const p=pos["partner"+i],h=contain(im,p.x*sx,p.y*sy,p.w*sx);
+      hitboxes.push({id:"partner"+i,x:p.x*sx,y:p.y*sy,w:p.w*sx,h});
+    });
+
+    ctx.textAlign="center";
+    ctx.fillStyle=tc;
+    ctx.font=`900 ${E("titleSize").value*sc}px ${titleF}`;
+    ctx.fillText(E("event").value.toUpperCase(),pos.title.x*sx,pos.title.y*sy);
+    ctx.fillStyle=ac;
+    ctx.font=`700 ${E("titleSize").value*.55*sc}px ${titleF}`;
+    ctx.fillText(E("location").value.toUpperCase(),pos.title.x*sx,(pos.title.y+60)*sy);
     hitboxes.push({id:"title",x:(pos.title.x-430)*sx,y:(pos.title.y-90)*sy,w:860*sx,h:170*sy});
-    ctx.textAlign="left";ctx.fillStyle=tc;ctx.font=`900 ${60*sc}px ${titleF}`;ctx.fillText(E("day").value.toUpperCase(),pos.date.x*sx,pos.date.y*sy);
-    ctx.font=`900 ${76*sc}px ${titleF}`;ctx.fillText(E("date").value,pos.date.x*sx,(pos.date.y+82)*sy);
+
+    ctx.textAlign="left";
+    ctx.fillStyle=tc;
+    ctx.font=`900 ${60*sc}px ${titleF}`;
+    ctx.fillText(E("day").value.toUpperCase(),pos.date.x*sx,pos.date.y*sy);
+    ctx.font=`900 ${76*sc}px ${titleF}`;
+    ctx.fillText(E("date").value,pos.date.x*sx,(pos.date.y+82)*sy);
     hitboxes.push({id:"date",x:pos.date.x*sx,y:(pos.date.y-65)*sy,w:330*sx,h:170*sy});
+
     const list=rows();
     const available=Math.max(180*sy,H-pos.table.y*sy-90*sy);
-    const gap=Math.min(73*sc,Math.max(34*sc,available/Math.max(list.length,1)));
+    const gap=Math.min(76*sc,Math.max(38*sc,available/Math.max(list.length,1)));
     const requested=E("bodySize").value*sc;
-    const bs=Math.min(requested,Math.max(22*sc,gap*.64));
-    list.forEach((r,i)=>{const y=pos.table.y*sy+i*gap;ctx.textAlign="right";ctx.fillStyle=tc;ctx.font=`800 ${bs}px ${bodyF}`;ctx.fillText(r[0],(pos.table.x+125)*sx,y);ctx.textAlign="left";ctx.fillStyle=ac;ctx.font=`900 ${bs}px ${bodyF}`;ctx.fillText(r[1],(pos.table.x+185)*sx,y);ctx.fillStyle=tc;ctx.font=`400 ${bs}px ${bodyF}`;ctx.fillText(r[2],(pos.table.x+330)*sx,y)});
-    hitboxes.push({id:"table",x:pos.table.x*sx,y:(pos.table.y-45)*sy,w:780*sx,h:list.length*gap+60*sy});
+    const bs=Math.min(requested,Math.max(23*sc,gap*.62));
+    const kind=E("template").value;
+    const tx=pos.table.x*sx,ty=pos.table.y*sy;
+
+    if(kind==="schedule"){
+      list.forEach((r,i)=>{
+        const y=ty+i*gap;
+        ctx.textAlign="right";ctx.fillStyle=tc;ctx.font=`800 ${bs}px ${bodyF}`;
+        ctx.fillText(r[0],tx+125*sx,y);
+        ctx.textAlign="left";ctx.fillStyle=ac;ctx.font=`900 ${bs}px ${bodyF}`;
+        ctx.fillText(r[1],tx+185*sx,y);
+        ctx.fillStyle=tc;ctx.font=`400 ${bs}px ${bodyF}`;
+        ctx.fillText(r[2],tx+330*sx,y);
+      });
+    }else if(kind==="results"){
+      list.forEach((r,i)=>{
+        const y=ty+i*gap;
+        ctx.textAlign="center";ctx.fillStyle=ac;ctx.font=`900 ${bs*1.08}px ${titleF}`;
+        ctx.fillText(r[0],tx+80*sx,y);
+        ctx.textAlign="left";ctx.fillStyle=tc;ctx.font=`700 ${bs}px ${bodyF}`;
+        ctx.fillText(r[1],tx+155*sx,y);
+        ctx.textAlign="right";ctx.fillStyle=tc;ctx.font=`700 ${bs}px ${bodyF}`;
+        ctx.fillText(r[2],tx+760*sx,y);
+      });
+    }else if(kind==="startlist"){
+      list.forEach((r,i)=>{
+        const y=ty+i*gap;
+        ctx.textAlign="center";ctx.fillStyle=ac;ctx.font=`900 ${bs*1.08}px ${titleF}`;
+        ctx.fillText(r[0],tx+70*sx,y);
+        ctx.textAlign="left";ctx.fillStyle=tc;ctx.font=`700 ${bs}px ${bodyF}`;
+        ctx.fillText(r[1],tx+145*sx,y);
+        ctx.fillStyle="#c7cbd2";ctx.font=`400 ${bs*.88}px ${bodyF}`;
+        ctx.fillText(r[2],tx+500*sx,y);
+      });
+    }else if(kind==="service"){
+      list.forEach((r,i)=>{
+        const y=ty+i*gap*1.12;
+        ctx.textAlign="left";ctx.fillStyle=ac;ctx.font=`900 ${bs*.9}px ${titleF}`;
+        ctx.fillText(r[0],tx+40*sx,y);
+        ctx.textAlign="right";ctx.fillStyle=tc;ctx.font=`900 ${bs*1.18}px ${titleF}`;
+        ctx.fillText(r[1],tx+720*sx,y);
+        ctx.textAlign="left";ctx.fillStyle=tc;ctx.font=`400 ${bs*.9}px ${bodyF}`;
+        ctx.fillText(r[2],tx+40*sx,y+34*sc);
+      });
+    }
+
+    hitboxes.push({id:"table",x:tx,y:ty-45*sy,w:800*sx,h:list.length*gap+80*sy});
     saveCurrent();
   }catch(err){
-    console.error(err);canvas.width=1080;canvas.height=1920;ctx.fillStyle="#050507";ctx.fillRect(0,0,1080,1920);ctx.fillStyle="#fff";ctx.font="700 42px Arial";ctx.fillText("Preview error",80,180);ctx.font="28px Arial";ctx.fillStyle="#bbb";ctx.fillText(String(err.message||err),80,240);
+    console.error(err);
+    canvas.width=1080;canvas.height=1920;
+    ctx.fillStyle="#050507";ctx.fillRect(0,0,1080,1920);
+    ctx.fillStyle="#fff";ctx.font="700 42px Arial";
+    ctx.fillText("Preview error",80,180);
+    ctx.font="28px Arial";ctx.fillStyle="#bbb";
+    ctx.fillText(String(err.message||err),80,240);
   }
 }
 function pointer(e){const r=canvas.getBoundingClientRect();return{x:(e.clientX-r.left)*canvas.width/r.width,y:(e.clientY-r.top)*canvas.height/r.height}}

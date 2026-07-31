@@ -1,2 +1,2 @@
-# SP Rally Studio v6.2
-Popravljena napaka f is not defined.
+# SP Rally Studio v6.3
+Vsaka predloga ima svoj razpored stolpcev. Popravljene pisave in prekrivanje besedila.
