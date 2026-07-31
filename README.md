@@ -1,2 +1,2 @@
-# SP Rally Studio Pro v5
-SLO/ENG in premikanje elementov z dotikom.
+# SP Rally Studio v6
+Brand Manager, zamenljiv glavni logotip, 6 partnerjev, zaklep elementov, SLO/ENG.
