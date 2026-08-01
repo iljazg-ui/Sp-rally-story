@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#050507">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
-<title>SP Rally Studio 7.1</title>
+<title>SP Rally Studio 7.2</title>
 <style>
 :root{color-scheme:dark;--bg:#08090b;--panel:#0e1014;--card:#171a20;--line:#2c313b;--text:#fff;--muted:#a7adb7}
 *{box-sizing:border-box}
@@ -36,7 +36,7 @@ canvas{max-width:min(480px,92vw);max-height:92vh;width:auto;height:auto;box-shad
 <div class="app">
 <aside class="panel">
 <div class="head">
-<h1>SP Rally Studio 7.1</h1>
+<h1>SP Rally Studio 7.2</h1>
 <div class="lang"><button id="slBtn" class="active">SLO</button><button id="enBtn">ENG</button></div>
 </div>
 <div id="subtitle" class="note">Element na predogledu primeš in povlečeš.</div>
@@ -86,9 +86,10 @@ canvas{max-width:min(480px,92vw);max-height:92vh;width:auto;height:auto;box-shad
 </select></div>
 </div>
 <div class="row">
-<div><label id="lblText">Barva teksta</label><input id="textColor" type="color" value="#ffffff"></div>
-<div><label id="lblAccent">Poudarek</label><input id="accentColor" type="color" value="#e10600"></div>
+<div><label id="lblTitleColor">Barva naslova</label><input id="titleColor" type="color" value="#ffffff"></div>
+<div><label id="lblBodyColor">Barva tabele</label><input id="bodyColor" type="color" value="#ffffff"></div>
 </div>
+<label id="lblAccent">Barva poudarka</label><input id="accentColor" type="color" value="#e10600">
 <label id="lblTitleSize">Velikost naslova</label><input id="titleSize" type="range" min="50" max="110" value="78">
 <label id="lblBodySize">Velikost vsebine</label><input id="bodySize" type="range" min="22" max="46" value="34">
 <div class="lockrow"><input id="lockElements" type="checkbox"><label for="lockElements" id="lblLock">Zakleni premikanje</label></div>
@@ -170,8 +171,8 @@ LOKACIJA | Zlin | Service Park`}
 };
 
 const TXT={
- sl:{subtitle:"Element na predogledu primeš in povlečeš.",tabContent:"Vsebina",tabDesign:"Dizajn",tabMedia:"Mediji",lblTemplate:"Vrsta grafike",lblEvent:"Glavni naslov",lblLocation:"Podnaslov",lblDay:"Dan",lblDate:"Datum",lblData:"Podatki",lblTitleFont:"Pisava naslova",lblBodyFont:"Pisava vsebine",lblText:"Barva teksta",lblAccent:"Poudarek",lblTitleSize:"Velikost naslova",lblBodySize:"Velikost vsebine",lblLock:"Zakleni premikanje",lblBg:"Ozadje",lblDarken:"Temnenje",lblMainLogo:"Glavni logotip",lblPartners:"Dodatni logotipi",reset:"PONASTAVI"},
- en:{subtitle:"Grab an element in the preview and drag it.",tabContent:"Content",tabDesign:"Design",tabMedia:"Media",lblTemplate:"Graphic type",lblEvent:"Main title",lblLocation:"Subtitle",lblDay:"Day",lblDate:"Date",lblData:"Data",lblTitleFont:"Title font",lblBodyFont:"Content font",lblText:"Text color",lblAccent:"Accent",lblTitleSize:"Title size",lblBodySize:"Content size",lblLock:"Lock movement",lblBg:"Background",lblDarken:"Darkness",lblMainLogo:"Main logo",lblPartners:"Additional logos",reset:"RESET"}
+ sl:{subtitle:"Element na predogledu primeš in povlečeš.",tabContent:"Vsebina",tabDesign:"Dizajn",tabMedia:"Mediji",lblTemplate:"Vrsta grafike",lblEvent:"Glavni naslov",lblLocation:"Podnaslov",lblDay:"Dan",lblDate:"Datum",lblData:"Podatki",lblTitleFont:"Pisava naslova",lblBodyFont:"Pisava vsebine",lblTitleColor:"Barva naslova",lblBodyColor:"Barva tabele",lblAccent:"Barva poudarka",lblTitleSize:"Velikost naslova",lblBodySize:"Velikost vsebine",lblLock:"Zakleni premikanje",lblBg:"Ozadje",lblDarken:"Temnenje",lblMainLogo:"Glavni logotip",lblPartners:"Dodatni logotipi",reset:"PONASTAVI"},
+ en:{subtitle:"Grab an element in the preview and drag it.",tabContent:"Content",tabDesign:"Design",tabMedia:"Media",lblTemplate:"Graphic type",lblEvent:"Main title",lblLocation:"Subtitle",lblDay:"Day",lblDate:"Date",lblData:"Data",lblTitleFont:"Title font",lblBodyFont:"Content font",lblTitleColor:"Title color",lblBodyColor:"Table color",lblAccent:"Accent color",lblTitleSize:"Title size",lblBodySize:"Content size",lblLock:"Lock movement",lblBg:"Background",lblDarken:"Darkness",lblMainLogo:"Main logo",lblPartners:"Additional logos",reset:"RESET"}
 };
 
 function tr(){
@@ -227,7 +228,7 @@ function drawCell(text,x,y,width,size,family,weight,color,align){
 function draw(){
  const W=1080,H=1920;
  canvas.width=W;canvas.height=H;
- const tc=E("textColor").value,ac=E("accentColor").value;
+ const titleC=E("titleColor").value,bodyC=E("bodyColor").value,ac=E("accentColor").value;
  const titleF=E("titleFont").value,bodyF=E("bodyFont").value;
  ctx.fillStyle="#050507";ctx.fillRect(0,0,W,H);
  if(bg){cover(bg,W,H);ctx.fillStyle=`rgba(0,0,0,${Number(E("darken").value)/100})`;ctx.fillRect(0,0,W,H)}
@@ -241,14 +242,14 @@ function draw(){
    hitboxes.push({id:key,x:p.x,y:p.y,w:p.w,h});
  });
 
- ctx.textAlign="center";ctx.fillStyle=tc;
+ ctx.textAlign="center";ctx.fillStyle=titleC;
  ctx.font=`900 ${E("titleSize").value}px ${titleF}`;
  ctx.fillText(E("event").value.toUpperCase(),positions.title.x,positions.title.y);
  ctx.fillStyle=ac;ctx.font=`700 ${Math.round(E("titleSize").value*.55)}px ${titleF}`;
  ctx.fillText(E("location").value.toUpperCase(),positions.title.x,positions.title.y+60);
  hitboxes.push({id:"title",x:positions.title.x-430,y:positions.title.y-90,w:860,h:170});
 
- ctx.textAlign="left";ctx.fillStyle=tc;
+ ctx.textAlign="left";ctx.fillStyle=titleC;
  ctx.font=`900 62px ${titleF}`;ctx.fillText(E("day").value.toUpperCase(),positions.date.x,positions.date.y);
  ctx.font=`900 78px ${titleF}`;ctx.fillText(E("date").value,positions.date.x,positions.date.y+85);
  hitboxes.push({id:"date",x:positions.date.x,y:positions.date.y-70,w:330,h:180});
@@ -262,30 +263,30 @@ function draw(){
  if(kind==="schedule"){
    rows.forEach((r,i)=>{
      const y=top+i*gap;
-     drawCell(r[0],ox+235,y,150,bs,bodyF,800,tc,"right");
+     drawCell(r[0],ox+235,y,150,bs,bodyF,800,bodyC,"right");
      drawCell(r[1],ox+285,y,115,bs,bodyF,900,ac,"left");
-     drawCell(r[2],ox+430,y,555,bs,bodyF,500,tc,"left");
+     drawCell(r[2],ox+430,y,555,bs,bodyF,500,bodyC,"left");
    });
  }else if(kind==="results"){
    rows.forEach((r,i)=>{
      const y=top+i*gap;
      drawCell(r[0],ox+120,y,90,bs*1.05,titleF,900,ac,"center");
-     drawCell(r[1],ox+190,y,500,bs,bodyF,700,tc,"left");
-     drawCell(r[2],ox+980,y,210,bs,bodyF,700,tc,"right");
+     drawCell(r[1],ox+190,y,500,bs,bodyF,700,bodyC,"left");
+     drawCell(r[2],ox+980,y,210,bs,bodyF,700,bodyC,"right");
    });
  }else if(kind==="startlist"){
    rows.forEach((r,i)=>{
      const y=top+i*gap;
      drawCell(r[0],ox+110,y,80,bs*1.05,titleF,900,ac,"center");
-     drawCell(r[1],ox+170,y,340,bs,bodyF,700,tc,"left");
+     drawCell(r[1],ox+170,y,340,bs,bodyF,700,bodyC,"left");
      drawCell(r[2],ox+560,y,420,bs*.92,bodyF,500,"#d0d4da","left");
    });
  }else{
    rows.forEach((r,i)=>{
      const y=top+i*gap*1.35;
      drawCell(r[0],ox+95,y,420,bs,titleF,900,ac,"left");
-     drawCell(r[1],ox+980,y,210,bs*1.15,titleF,900,tc,"right");
-     drawCell(r[2],ox+95,y+38,840,bs*.85,bodyF,500,tc,"left");
+     drawCell(r[1],ox+980,y,210,bs*1.15,titleF,900,bodyC,"right");
+     drawCell(r[2],ox+95,y+38,840,bs*.85,bodyF,500,bodyC,"left");
    });
  }
  hitboxes.push({id:"table",x:ox+50,y:top-45,w:980,h:Math.max(100,rows.length*gap+70)});
@@ -293,7 +294,7 @@ function draw(){
 }
 function save(){
  const vals={};
- ["template","event","location","day","date","data","titleFont","bodyFont","textColor","accentColor","titleSize","bodySize","darken","lockElements"].forEach(id=>{
+ ["template","event","location","day","date","data","titleFont","bodyFont","titleColor","bodyColor","accentColor","titleSize","bodySize","darken","lockElements"].forEach(id=>{
    vals[id]=E(id).type==="checkbox"?E(id).checked:E(id).value;
  });
  try{localStorage.setItem("spRally71",JSON.stringify({lang,vals,positions}))}catch(e){}
@@ -351,7 +352,7 @@ document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{
 E("slBtn").onclick=()=>{lang="sl";tr();draw()};
 E("enBtn").onclick=()=>{lang="en";tr();draw()};
 E("template").onchange=setTemplate;
-["event","location","day","date","data","titleFont","bodyFont","textColor","accentColor","titleSize","bodySize","darken","lockElements"].forEach(id=>E(id).addEventListener("input",draw));
+["event","location","day","date","data","titleFont","bodyFont","titleColor","bodyColor","accentColor","titleSize","bodySize","darken","lockElements"].forEach(id=>E(id).addEventListener("input",draw));
 E("background").onchange=e=>readImg(e.target.files[0],im=>{bg=im;draw()});
 E("mainLogoInput").onchange=e=>readImg(e.target.files[0],im=>{mainLogo=im;draw()});
 document.querySelectorAll(".partnerInput").forEach(inp=>inp.onchange=e=>readImg(e.target.files[0],im=>{partners[Number(inp.dataset.i)]=im;draw()}));
