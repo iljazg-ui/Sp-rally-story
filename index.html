@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#050507">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
-<title>SP Rally Studio 7.2</title>
+<title>SP Rally Studio 7.3</title>
 <style>
 :root{color-scheme:dark;--bg:#08090b;--panel:#0e1014;--card:#171a20;--line:#2c313b;--text:#fff;--muted:#a7adb7}
 *{box-sizing:border-box}
@@ -36,7 +36,7 @@ canvas{max-width:min(480px,92vw);max-height:92vh;width:auto;height:auto;box-shad
 <div class="app">
 <aside class="panel">
 <div class="head">
-<h1>SP Rally Studio 7.2</h1>
+<h1>SP Rally Studio 7.3</h1>
 <div class="lang"><button id="slBtn" class="active">SLO</button><button id="enBtn">ENG</button></div>
 </div>
 <div id="subtitle" class="note">Element na predogledu primeš in povlečeš.</div>
@@ -99,14 +99,16 @@ canvas{max-width:min(480px,92vw);max-height:92vh;width:auto;height:auto;box-shad
 <label id="lblBg">Ozadje</label><input id="background" type="file" accept="image/*">
 <label id="lblDarken">Temnenje</label><input id="darken" type="range" min="0" max="90" value="55">
 <label id="lblMainLogo">Glavni logotip</label><input id="mainLogoInput" type="file" accept="image/*">
+<label id="lblMainLogoSize">Velikost glavnega logotipa</label>
+<input id="mainLogoSize" type="range" min="20" max="250" value="100">
 <label id="lblPartners">Dodatni logotipi</label>
 <div class="logo-grid">
-<input class="partnerInput" data-i="0" type="file" accept="image/*">
-<input class="partnerInput" data-i="1" type="file" accept="image/*">
-<input class="partnerInput" data-i="2" type="file" accept="image/*">
-<input class="partnerInput" data-i="3" type="file" accept="image/*">
-<input class="partnerInput" data-i="4" type="file" accept="image/*">
-<input class="partnerInput" data-i="5" type="file" accept="image/*">
+<div><input class="partnerInput" data-i="0" type="file" accept="image/*"><input id="partnerSize0" type="range" min="20" max="250" value="100"></div>
+<div><input class="partnerInput" data-i="1" type="file" accept="image/*"><input id="partnerSize1" type="range" min="20" max="250" value="100"></div>
+<div><input class="partnerInput" data-i="2" type="file" accept="image/*"><input id="partnerSize2" type="range" min="20" max="250" value="100"></div>
+<div><input class="partnerInput" data-i="3" type="file" accept="image/*"><input id="partnerSize3" type="range" min="20" max="250" value="100"></div>
+<div><input class="partnerInput" data-i="4" type="file" accept="image/*"><input id="partnerSize4" type="range" min="20" max="250" value="100"></div>
+<div><input class="partnerInput" data-i="5" type="file" accept="image/*"><input id="partnerSize5" type="range" min="20" max="250" value="100"></div>
 </div>
 </section>
 
@@ -171,8 +173,8 @@ LOKACIJA | Zlin | Service Park`}
 };
 
 const TXT={
- sl:{subtitle:"Element na predogledu primeš in povlečeš.",tabContent:"Vsebina",tabDesign:"Dizajn",tabMedia:"Mediji",lblTemplate:"Vrsta grafike",lblEvent:"Glavni naslov",lblLocation:"Podnaslov",lblDay:"Dan",lblDate:"Datum",lblData:"Podatki",lblTitleFont:"Pisava naslova",lblBodyFont:"Pisava vsebine",lblTitleColor:"Barva naslova",lblBodyColor:"Barva tabele",lblAccent:"Barva poudarka",lblTitleSize:"Velikost naslova",lblBodySize:"Velikost vsebine",lblLock:"Zakleni premikanje",lblBg:"Ozadje",lblDarken:"Temnenje",lblMainLogo:"Glavni logotip",lblPartners:"Dodatni logotipi",reset:"PONASTAVI"},
- en:{subtitle:"Grab an element in the preview and drag it.",tabContent:"Content",tabDesign:"Design",tabMedia:"Media",lblTemplate:"Graphic type",lblEvent:"Main title",lblLocation:"Subtitle",lblDay:"Day",lblDate:"Date",lblData:"Data",lblTitleFont:"Title font",lblBodyFont:"Content font",lblTitleColor:"Title color",lblBodyColor:"Table color",lblAccent:"Accent color",lblTitleSize:"Title size",lblBodySize:"Content size",lblLock:"Lock movement",lblBg:"Background",lblDarken:"Darkness",lblMainLogo:"Main logo",lblPartners:"Additional logos",reset:"RESET"}
+ sl:{subtitle:"Element na predogledu primeš in povlečeš.",tabContent:"Vsebina",tabDesign:"Dizajn",tabMedia:"Mediji",lblTemplate:"Vrsta grafike",lblEvent:"Glavni naslov",lblLocation:"Podnaslov",lblDay:"Dan",lblDate:"Datum",lblData:"Podatki",lblTitleFont:"Pisava naslova",lblBodyFont:"Pisava vsebine",lblTitleColor:"Barva naslova",lblBodyColor:"Barva tabele",lblAccent:"Barva poudarka",lblTitleSize:"Velikost naslova",lblBodySize:"Velikost vsebine",lblLock:"Zakleni premikanje",lblBg:"Ozadje",lblDarken:"Temnenje",lblMainLogo:"Glavni logotip",lblMainLogoSize:"Velikost glavnega logotipa",lblPartners:"Dodatni logotipi",reset:"PONASTAVI"},
+ en:{subtitle:"Grab an element in the preview and drag it.",tabContent:"Content",tabDesign:"Design",tabMedia:"Media",lblTemplate:"Graphic type",lblEvent:"Main title",lblLocation:"Subtitle",lblDay:"Day",lblDate:"Date",lblData:"Data",lblTitleFont:"Title font",lblBodyFont:"Content font",lblTitleColor:"Title color",lblBodyColor:"Table color",lblAccent:"Accent color",lblTitleSize:"Title size",lblBodySize:"Content size",lblLock:"Lock movement",lblBg:"Background",lblDarken:"Darkness",lblMainLogo:"Main logo",lblMainLogoSize:"Main logo size",lblPartners:"Additional logos",reset:"RESET"}
 };
 
 function tr(){
@@ -234,12 +236,12 @@ function draw(){
  if(bg){cover(bg,W,H);ctx.fillStyle=`rgba(0,0,0,${Number(E("darken").value)/100})`;ctx.fillRect(0,0,W,H)}
  hitboxes=[];
 
- const mainH=contain(mainLogo,positions.mainLogo);
- hitboxes.push({id:"mainLogo",x:positions.mainLogo.x,y:positions.mainLogo.y,w:positions.mainLogo.w,h:mainH});
+ const mainDraw={...positions.mainLogo,w:positions.mainLogo.w*(Number(E("mainLogoSize").value)/100)}; const mainH=contain(mainLogo,mainDraw);
+ hitboxes.push({id:"mainLogo",x:mainDraw.x,y:mainDraw.y,w:mainDraw.w,h:mainH});
  partners.forEach((im,i)=>{
    if(!im)return;
-   const key="partner"+i,p=positions[key],h=contain(im,p);
-   hitboxes.push({id:key,x:p.x,y:p.y,w:p.w,h});
+   const key="partner"+i,p=positions[key],drawP={...p,w:p.w*(Number(E("partnerSize"+i).value)/100)},h=contain(im,drawP);
+   hitboxes.push({id:key,x:drawP.x,y:drawP.y,w:drawP.w,h});
  });
 
  ctx.textAlign="center";ctx.fillStyle=titleC;
@@ -294,7 +296,7 @@ function draw(){
 }
 function save(){
  const vals={};
- ["template","event","location","day","date","data","titleFont","bodyFont","titleColor","bodyColor","accentColor","titleSize","bodySize","darken","lockElements"].forEach(id=>{
+ ["template","event","location","day","date","data","titleFont","bodyFont","titleColor","bodyColor","accentColor","titleSize","bodySize","darken","lockElements","mainLogoSize","partnerSize0","partnerSize1","partnerSize2","partnerSize3","partnerSize4","partnerSize5"].forEach(id=>{
    vals[id]=E(id).type==="checkbox"?E(id).checked:E(id).value;
  });
  try{localStorage.setItem("spRally71",JSON.stringify({lang,vals,positions}))}catch(e){}
@@ -352,7 +354,7 @@ document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{
 E("slBtn").onclick=()=>{lang="sl";tr();draw()};
 E("enBtn").onclick=()=>{lang="en";tr();draw()};
 E("template").onchange=setTemplate;
-["event","location","day","date","data","titleFont","bodyFont","titleColor","bodyColor","accentColor","titleSize","bodySize","darken","lockElements"].forEach(id=>E(id).addEventListener("input",draw));
+["event","location","day","date","data","titleFont","bodyFont","titleColor","bodyColor","accentColor","titleSize","bodySize","darken","lockElements","mainLogoSize","partnerSize0","partnerSize1","partnerSize2","partnerSize3","partnerSize4","partnerSize5"].forEach(id=>E(id).addEventListener("input",draw));
 E("background").onchange=e=>readImg(e.target.files[0],im=>{bg=im;draw()});
 E("mainLogoInput").onchange=e=>readImg(e.target.files[0],im=>{mainLogo=im;draw()});
 document.querySelectorAll(".partnerInput").forEach(inp=>inp.onchange=e=>readImg(e.target.files[0],im=>{partners[Number(inp.dataset.i)]=im;draw()}));

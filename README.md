@@ -1,2 +1,2 @@
-# SP Rally Studio 7.2
-Dodane ločene barve za naslov, tabelo in poudarek. Ohranjenih 6 logotipov in premikanje elementov.
+# SP Rally Studio 7.3
+Dodano spreminjanje velikosti glavnega in vseh šestih dodatnih logotipov.
